@@ -1,104 +1,155 @@
 #include "game.h"
 
-	void Mouse(int btn, int state, int x, int y)
+void Mouse(int btn, int state, int x, int y)
+{
+	if (btn == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 	{
-
-		if (btn == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-		{
-			game::x_pos_old = x;         // przypisanie aktualnie odczytanej pozycji kursora
-								   // jako pozycji poprzedniej
-			game::y_pos_old = y;          // przypisanie aktualnie odczytanej pozycji kursora
-									// jako pozycji poprzedniej
-
-			status = 1;          // wciêniêty zosta³ lewy klawisz myszy
-		}
-		else if (btn == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
-		{
-			y_pos_old = y;
-			status = 2;
-		}
-		else
-			status = 0;          // nie zosta³ wciêniêty ¿aden klawisz
+		x_pos_old = x;          // przypisanie aktualnie odczytanej pozycji kursora jako pozycji poprzedniej
+		y_pos_old = y;          // przypisanie aktualnie odczytanej pozycji kursora jako pozycji poprzedniej
+		status = 1;				// wciêniêty zosta³ lewy klawisz myszy
 	}
-
-	void Motion(GLsizei x, GLsizei y)
+	else if (btn == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
 	{
-		delta_x = x - x_pos_old;     // obliczenie ró¿nicy po³o¿enia kursora myszy
-		delta_y = y - y_pos_old;
-		x_pos_old = x;            // podstawienie bie¿¹cego po³o¿enia jako poprzednie
 		y_pos_old = y;
-		glutPostRedisplay();     // przerysowanie obrazu sceny
+		status = 2;
+	}
+	else
+		status = 0;				// nie zosta³ wciêniêty ¿aden klawisz
+}
+
+void Motion(GLsizei x, GLsizei y)
+{
+	delta_x = x - x_pos_old;    // obliczenie ró¿nicy po³o¿enia kursora myszy
+	delta_y = y - y_pos_old;	
+	x_pos_old = x;				// podstawienie bie¿¹cego po³o¿enia jako poprzednie
+	y_pos_old = y;
+	glutPostRedisplay();		// przerysowanie obrazu sceny
+}
+
+void renderTeapot(GLfloat x, GLfloat z)
+{
+	glTranslatef(x, 0, z);
+	glutSolidTeapot(2.0);
+}
+
+void renderEgg(GLfloat x, GLfloat z)
+{
+	glTranslatef(x, 0, z);
+	Egg egg(x, z);
+}
+
+void RenderScene()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+	//	gluLookAt(viewer[0], viewer[1], viewer[2], 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	// Zdefiniowanie po³o¿enia obserwatora
+
+	if (status == 1)                     // jeœli lewy klawisz myszy wciêniêty
+	{
+		theta += delta_x * pix2angle*M_PI / 180;    // modyfikacja k¹ta obrotu o kat proporcjonalny do ró¿nicy po³o¿eñ kursora myszy
+		phi += delta_y * pix2angle*M_PI / 180;
+	}
+	else if (status == 2) {
+		if (R > 0 || delta_y > 0.1) R += delta_y;
 	}
 
-	void renderTeapot(GLfloat x, GLfloat z)
+	int kier = 1;
+	if (cos(phi) < 0) kier = -1;
+
+	gluLookAt((double)R*cos(theta)*cos(phi), (double)R*sin(phi), (double)R*sin(theta)*cos(phi), 0.0, 0.0, 0.0, 0.0, (double)kier, 0.0);
+
+	Egg egg(0.0, 0.0);
+	existingEggs.push_back(egg);
+
+	renderTeapot(potTransition[0], potTransition[1]);
+
+	glFlush();
+	// Przekazanie poleceñ rysuj¹cych do wykonania
+	glutSwapBuffers();
+}
+
+void specialKey(int key, int x, int y)
 	{
-		glTranslatef(x, 0, z);
-		glutSolidTeapot(3.0);
-	}
-
-	void RenderScene()
-	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		// Czyszczenie okna aktualnym kolorem czyszcz¹cym
-		glLoadIdentity();
-		// Czyszczenie macierzy bie??cej
-		//	gluLookAt(viewer[0], viewer[1], viewer[2], 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-		// Zdefiniowanie po³o¿enia obserwatora
-
-		if (status == 1)                     // jeœli lewy klawisz myszy wciêniêty
-		{
-			theta += delta_x * pix2angle*M_PI / 180;    // modyfikacja k¹ta obrotu o kat proporcjonalny
-														// do ró¿nicy po³o¿eñ kursora myszy
-			phi += delta_y * pix2angle*M_PI / 180;
-		}
-		else if (status == 2) {
-			if (R > 0 || delta_y > 0.1) R += delta_y;
-		}
-
-		int kier = 1;
-		if (cos(game::phi) < 0) kier = -1;
-
-		gluLookAt((double)R*cos(theta)*cos(phi), (double)R*sin(phi), (double)R*sin(theta)*cos(phi), 0.0, 0.0, 0.0, 0.0, (double)kier, 0.0);
-		//draw();
-		Egg egg(0.0, 0.0);
-		// Narysowanie jajka
-		renderTeapot(potTransition[0], potTransition[1]);
-
-		glFlush();
-		// Przekazanie poleceñ rysuj¹cych do wykonania
-		glutSwapBuffers();
-	}
-
-	void specialKey(int key, int x, int y)
-	{
-
 		switch (key)
 		{
 		case GLUT_KEY_UP:
-			potTransition[0] = potTransition[0] + 6.0;
+			currentMove = upM;
+			checkForCollision(potTransition,existingEggs);
+			potTransition[0] += 6.0;
+			
 			break;
 		case GLUT_KEY_DOWN:
-			potTransition[0] = potTransition[0] - 6.0;
+			currentMove = downM;
+			checkForCollision(potTransition, existingEggs);
+			potTransition[0] -= 6.0;
+			
 			break;
 		case GLUT_KEY_LEFT:
-			potTransition[1] = potTransition[1] + 6.0;
+			currentMove = leftM;
+			checkForCollision(potTransition, existingEggs);
+			potTransition[1] += 6.0;
+			
 			break;
 		case GLUT_KEY_RIGHT:
-			potTransition[1] = potTransition[1] - 6.0;
+			currentMove = rightM;
+			checkForCollision(potTransition, existingEggs);
+			potTransition[1] -= 6.0;
+			
 			break;
 		default: break;
 		}
 		renderTeapot(potTransition[0], potTransition[1]);
-		//RenderScene();
 		glutPostRedisplay();
 	}
 
-	void addNewEgg(Egg newEgg)
+void checkForCollision(GLfloat potTransition[], vector<Egg> existingEggs)
+{
+	switch(currentMove)
 	{
-		existingEggs.push_back(newEgg);
-	}
+	case upM:
+		if(potTransition[0]+6.0 == existingEggs[0].eggTransition[0] && potTransition[1] == existingEggs[0].eggTransition[1])
+		{
+			//warunek z nastêpnym jajkiem za jajkiem do przesuniêcia
+			//warunek z koñcem planszy
+			existingEggs[0].eggTransition[0] += 6;
+		}
+		break;
+	case downM:
+		if (potTransition[0] - 6.0 == existingEggs[0].eggTransition[0] && potTransition[1] == existingEggs[0].eggTransition[1])
+		{
+			//warunek z nastêpnym jajkiem za jajkiem do przesuniêcia
+			//warunek z koñcem planszy
+			existingEggs[0].eggTransition[0] -= 6;
+		}
+		break;
+	case leftM:
+		if (potTransition[0] == existingEggs[0].eggTransition[0] && potTransition[1] + 6.0 == existingEggs[0].eggTransition[1])
+		{
+			//warunek z nastêpnym jajkiem za jajkiem do przesuniêcia
+			//warunek z koñcem planszy
+			existingEggs[0].eggTransition[1] += 6;
+		}
+		break;
+	case rightM:
+		if (potTransition[0] == existingEggs[0].eggTransition[0] && potTransition[1] - 6.0 == existingEggs[0].eggTransition[1])
+		{
+			//warunek z nastêpnym jajkiem za jajkiem do przesuniêcia
+			//warunek z koñcem planszy
+			existingEggs[0].eggTransition[1] -= 6;
+		}
+		break;
+	default: 
+		break;
+}
+//	glMatrixMode(GL_MODELVIEW);
+//	glLoadIdentity();
+//	glTranslatef(existingEggs[0].eggTransition[0], 0, existingEggs[0].eggTransition[1]);
+//	RenderScene();
+//	glutPostRedisplay();
+}
 
-	GLbyte* LoadTGAImage(const char* FileName, GLint* ImWidth, GLint* ImHeight, GLint* ImComponents, GLenum* ImFormat)
+GLbyte* LoadTGAImage(const char* FileName, GLint* ImWidth, GLint* ImHeight, GLint* ImComponents, GLenum* ImFormat)
 	{
 		// Struktura dla nag³ówka pliku  TGA
 #pragma pack(1)            
@@ -301,17 +352,14 @@
 		//srand(time(NULL));
 
 		glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-		glutInitWindowSize(300, 300);
+		glutInitWindowSize(600, 600);
 		glutCreateWindow("Sokoban");
 		//	GeneratingTab();
 
 		glutDisplayFunc(RenderScene);
-		// Okreœlenie, ¿e funkcja RenderScene bêdzie funkcj¹ zwrotn¹
-		// (callback function).  Bêdzie ona wywo³ywana za ka¿dym razem
-		// gdy zajdzie potrzeba przerysowania okna
+		// Okreœlenie, ¿e funkcja RenderScene bêdzie funkcj¹ zwrotn¹ (callback function).  Bêdzie ona wywo³ywana za ka¿dym razem gdy zajdzie potrzeba przerysowania okna
 		glutReshapeFunc(ChangeSize);
-		// Dla aktualnego okna ustala funkcjê zwrotn¹ odpowiedzialn¹
-		// za zmiany rozmiaru okna                      
+		// Dla aktualnego okna ustala funkcjê zwrotn¹ odpowiedzialn¹ za zmiany rozmiaru okna                      
 		glutMouseFunc(Mouse);
 		// Ustala funkcjê zwrotn¹ odpowiedzialn¹ za badanie stanu myszy
 		glutMotionFunc(Motion);
@@ -319,8 +367,7 @@
 		glutSpecialFunc(specialKey);
 
 		MyInit();
-		// Funkcja MyInit() (zdefiniowana powy¿ej) wykonuje wszelkie
-		// inicjalizacje konieczne  przed przyst¹pieniem do renderowania
+		// Funkcja MyInit() (zdefiniowana powy¿ej) wykonuje wszelkie inicjalizacje konieczne  przed przyst¹pieniem do renderowania
 		glEnable(GL_DEPTH_TEST);
 		// W³¹czenie mechanizmu usuwania niewidocznych elementów sceny
 		glutMainLoop();

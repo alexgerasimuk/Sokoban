@@ -5,8 +5,6 @@ void DrawScene::Draw_OuterWall(GLuint texture, BOOL isDisplay)
 	if (isDisplay)
 	{
 		glPushMatrix();
-
-
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, texture);
 

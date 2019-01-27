@@ -17,12 +17,12 @@ struct Point {
 
 class Egg
 {
+	public:
 	GLfloat eggTransition[2];
-public:
 	Egg(GLfloat x, GLfloat z);
 	void setPosition(GLfloat x, GLfloat z);
 	int N = 100;                        // iloœæ punktów (okr¹g³oœæ jajka)
-	Point **tablica;
+	Point **pointsTable;
 	void GeneratingTab();
 	~Egg();
 };
