@@ -58,61 +58,64 @@ Egg::Egg(GLfloat x, GLfloat z)
 			pointsTable[i][j].ny = pointsTable[i][j].ny / dlug;
 			pointsTable[i][j].nz = pointsTable[i][j].nz / dlug;
 
-		}
-
-	for (int i = 0; i <= N; i++)
-		for (int j = 0; j <= N; j++)
-		{
-			float i1 = (float)i / (float)N;
-			float i2 = (float)(i + 1) / (float)N;
-			float j1 = (float)j / (float)N;
-			float j2 = (float)(j + 1) / (float)N;
-
-			if (i <= (N - 1))
-			{
-				if (j <= (N - 1))
-				{
-
-					glBegin(GL_TRIANGLES);
-
-					glTexCoord2d(i1, j1);
-					glNormal3f(pointsTable[i][j].nx, pointsTable[i][j].ny, pointsTable[i][j].nz);
-					glVertex3f(pointsTable[i][j].x, pointsTable[i][j].y - 5.0f, pointsTable[i][j].z);
-
-					glTexCoord2d(i2, j2);
-					glNormal3f(pointsTable[i + 1][j + 1].nx, pointsTable[i + 1][j + 1].ny, pointsTable[i + 1][j + 1].nz);
-					glVertex3f(pointsTable[i + 1][j + 1].x, pointsTable[i + 1][j + 1].y - 5.0f, pointsTable[i + 1][j + 1].z);
-
-					glTexCoord2d(i1, j2);
-					glNormal3f(pointsTable[i][j + 1].nx, pointsTable[i][j + 1].ny, pointsTable[i][j + 1].nz);
-					glVertex3f(pointsTable[i][j + 1].x, pointsTable[i][j + 1].y - 5.0f, pointsTable[i][j + 1].z);
-					glEnd();
-
-					glBegin(GL_TRIANGLES);
-
-					glTexCoord2d(i1, j1);
-					glNormal3f(pointsTable[i][j].nx, pointsTable[i][j].ny, pointsTable[i][j].nz);
-					glVertex3f(pointsTable[i][j].x, pointsTable[i][j].y - 5.0f, pointsTable[i][j].z);
-
-
-					glTexCoord2d(i2, j2);
-					glNormal3f(pointsTable[i + 1][j + 1].nx, pointsTable[i + 1][j + 1].ny, pointsTable[i + 1][j + 1].nz);
-					glVertex3f(pointsTable[i + 1][j + 1].x, pointsTable[i + 1][j + 1].y - 5.0f, pointsTable[i + 1][j + 1].z);
-
-
-					glTexCoord2d(i2, j1);
-					glNormal3f(pointsTable[i + 1][j].nx, pointsTable[i + 1][j].ny, pointsTable[i + 1][j].nz);
-					glVertex3f(pointsTable[i + 1][j].x, pointsTable[i + 1][j].y - 5.0f, pointsTable[i + 1][j].z);
-					glEnd();
-				}
-			}
-		}
+		}	
 }
 
 void Egg::setPosition(GLfloat x, GLfloat z)
 {
 	eggTransition[0] = x;
 	eggTransition[1] = z;
+}
+
+void Egg::renderEgg()
+{
+for (int i = 0; i <= N; i++)
+	for (int j = 0; j <= N; j++)
+	{
+		float i1 = (float)i / (float)N;
+		float i2 = (float)(i + 1) / (float)N;
+		float j1 = (float)j / (float)N;
+		float j2 = (float)(j + 1) / (float)N;
+
+		if (i <= (N - 1))
+		{
+			if (j <= (N - 1))
+			{
+
+				glBegin(GL_TRIANGLES);
+
+				glTexCoord2d(i1, j1);
+				glNormal3f(pointsTable[i][j].nx + eggTransition[0], pointsTable[i][j].ny, pointsTable[i][j].nz + eggTransition[1]);
+				glVertex3f(pointsTable[i][j].x + eggTransition[0], pointsTable[i][j].y - 5.0f, pointsTable[i][j].z + eggTransition[1]);
+
+				glTexCoord2d(i2, j2);
+				glNormal3f(pointsTable[i + 1][j + 1].nx + eggTransition[0], pointsTable[i + 1][j + 1].ny, pointsTable[i + 1][j + 1].nz + eggTransition[1]);
+				glVertex3f(pointsTable[i + 1][j + 1].x + eggTransition[0], pointsTable[i + 1][j + 1].y - 5.0f, pointsTable[i + 1][j + 1].z + eggTransition[1]);
+
+				glTexCoord2d(i1, j2);
+				glNormal3f(pointsTable[i][j + 1].nx + eggTransition[0], pointsTable[i][j + 1].ny, pointsTable[i][j + 1].nz + eggTransition[1]);
+				glVertex3f(pointsTable[i][j + 1].x + eggTransition[0], pointsTable[i][j + 1].y - 5.0f, pointsTable[i][j + 1].z + eggTransition[1]);
+				glEnd();
+
+				glBegin(GL_TRIANGLES);
+
+				glTexCoord2d(i1, j1);
+				glNormal3f(pointsTable[i][j].nx + eggTransition[0], pointsTable[i][j].ny, pointsTable[i][j].nz + eggTransition[1]);
+				glVertex3f(pointsTable[i][j].x + eggTransition[0], pointsTable[i][j].y - 5.0f, pointsTable[i][j].z + eggTransition[1]);
+
+
+				glTexCoord2d(i2, j2);
+				glNormal3f(pointsTable[i + 1][j + 1].nx + eggTransition[0], pointsTable[i + 1][j + 1].ny, pointsTable[i + 1][j + 1].nz + eggTransition[1]);
+				glVertex3f(pointsTable[i + 1][j + 1].x + eggTransition[0], pointsTable[i + 1][j + 1].y - 5.0f, pointsTable[i + 1][j + 1].z + eggTransition[1]);
+
+
+				glTexCoord2d(i2, j1);
+				glNormal3f(pointsTable[i + 1][j].nx + eggTransition[0], pointsTable[i + 1][j].ny, pointsTable[i + 1][j].nz + eggTransition[1]);
+				glVertex3f(pointsTable[i + 1][j].x + eggTransition[0], pointsTable[i + 1][j].y - 5.0f, pointsTable[i + 1][j].z + eggTransition[1]);
+				glEnd();
+			}
+		}
+	}
 }
 
 void Egg::GeneratingTab()

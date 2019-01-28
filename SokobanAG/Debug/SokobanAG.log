@@ -1,4 +1,1 @@
-﻿  game.cpp
-c:\users\alex\documents\visual studio 2017\projects\sokobanag\sokobanag\game.cpp(266): warning C4838: konwersja z „double” do „GLfloat” wymaga konwersji zawężającej
-  SokobanAG.vcxproj -> C:\Users\Alex\documents\visual studio 2017\Projects\SokobanAG\Debug\SokobanAG.exe
-  SokobanAG.vcxproj -> C:\Users\Alex\documents\visual studio 2017\Projects\SokobanAG\Debug\SokobanAG.pdb (Partial PDB)
+﻿LINK : fatal error LNK1168: nie można otworzyć pliku C:\Users\Alex\documents\visual studio 2017\Projects\SokobanAG\Debug\SokobanAG.exe do zapisu

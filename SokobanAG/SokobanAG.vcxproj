@@ -142,6 +142,7 @@
     <ClInclude Include="DisplayScene.h" />
     <ClInclude Include="DrawScene.h" />
     <ClInclude Include="Egg.h" />
+    <ClInclude Include="Floor.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="GameDrawer.h" />
     <ClInclude Include="Md2Model.h" />
@@ -150,6 +151,7 @@
     <ClCompile Include="DisplayScene.cpp" />
     <ClCompile Include="DrawScene.cpp" />
     <ClCompile Include="Egg.cpp" />
+    <ClCompile Include="Floor.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="GameDrawer.cpp" />
     <ClCompile Include="MD2Model.cpp" />

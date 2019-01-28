@@ -21,6 +21,7 @@ class Egg
 	GLfloat eggTransition[2];
 	Egg(GLfloat x, GLfloat z);
 	void setPosition(GLfloat x, GLfloat z);
+	void renderEgg();
 	int N = 100;                        // iloœæ punktów (okr¹g³oœæ jajka)
 	Point **pointsTable;
 	void GeneratingTab();
