@@ -28,15 +28,16 @@ void Motion(GLsizei x, GLsizei y)
 
 void renderTeapot(GLfloat x, GLfloat z)
 {
-	glTranslatef(x, 0, z);
-	glutSolidTeapot(2.0);
+	glTranslatef(x, -3.5, z);
+	glutSolidTeapot(2.5);
+	glTranslatef(-x, +3.5, -z);
 }
 
 void renderEgg(GLfloat x, GLfloat z)
 {
 	glTranslatef(x, 0, z);
-	Egg egg(x, z);
-	glutPostRedisplay();
+
+	glTranslatef(-x, 0, -z);
 }
 
 void RenderScene()
@@ -57,9 +58,18 @@ void RenderScene()
 
 	gluLookAt((double)R*cos(theta)*cos(phi), (double)R*sin(phi), (double)R*sin(theta)*cos(phi), 0.0, 0.0, 0.0, 0.0, (double)kier, 0.0);
 
+
+	glTexImage2D(GL_TEXTURE_2D, 0, ImComponents, ImWidth, ImHeight, 0, ImFormat, GL_UNSIGNED_BYTE, firstLevelTex);// Zdefiniowanie tekstury 2-D
 	level.renderFloor();
-	egg.renderEgg();
+
+	
+	glTexImage2D(GL_TEXTURE_2D, 0, ImComponents, ImWidth, ImHeight, 0, ImFormat, GL_UNSIGNED_BYTE, teapotTex);// Zdefiniowanie tekstury 2-D
 	renderTeapot(potTransition[0], potTransition[1]);
+
+	
+	glTexImage2D(GL_TEXTURE_2D, 0, ImComponents, ImWidth, ImHeight, 0, ImFormat, GL_UNSIGNED_BYTE, eggTex);
+	egg.renderEgg();
+
 	glFlush();
 	glutSwapBuffers();
 }
@@ -68,13 +78,13 @@ void specialKey(int key, int x, int y)
 	{
 		switch (key)
 		{
-		case GLUT_KEY_UP:
+		case GLUT_KEY_DOWN:
 			currentMove = upM;
 			checkForCollision(potTransition,existingEggs);
 			potTransition[0] += 6.0;
 			
 			break;
-		case GLUT_KEY_DOWN:
+		case GLUT_KEY_UP:
 			currentMove = downM;
 			checkForCollision(potTransition, existingEggs);
 			potTransition[0] -= 6.0;
@@ -100,7 +110,7 @@ void specialKey(int key, int x, int y)
 	}
 
 void checkForCollision(GLfloat potTransition[], vector<Egg> &existingEggs)
-{
+{ //dodaæ wiêcej jajek do wektora, zmieniæ na wybiernanie obiektów po wektorze
 	switch(currentMove)
 	{
 	case upM:
@@ -166,7 +176,7 @@ GLbyte* LoadTGAImage(const char* FileName, GLint* ImWidth, GLint* ImHeight, GLin
 		TGAHEADER tgaHeader;
 		unsigned long lImageSize;
 		short sDepth;
-		GLbyte    *pbitsperpixel = NULL;
+		GLbyte *pbitsperpixel = NULL;
 
 		// Wartoœci domyœlne zwracane w przypadku b³êdu
 
@@ -244,51 +254,27 @@ void MyInit()
 	GLfloat mat_shininess = { 10.0 };
 	// wspó³czynnik n opisuj¹cy po³ysk powierzchni
 
-
-	// Zmienne dla obrazu tekstury
-	GLbyte *pBytes;
-	GLint ImWidth, ImHeight, ImComponents;
-	GLenum ImFormat;
-
-
 	// Definicja Ÿród³a œwiat³a
+	GLfloat light_position[] = { 0.0, 0.0, 5.0, 1.0 };			// po³o¿enie Ÿród³a
+	GLfloat light_ambient[] = { 0.1, 0.1, 0.1, 1.0 };			// sk³adowe intensywnoœci œwiecenia Ÿród³a œwiat³a otoczenia Ia = [Iar,Iag,Iab]
+	GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };			// sk³adowe intensywnoœci œwiecenia Ÿród³a œwiat³a powoduj¹cego odbicie dyfuzyjne Id = [Idr,Idg,Idb]
+	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };			// sk³adowe intensywnoœci œwiecenia Ÿród³a œwiat³a powoduj¹cego odbicie kierunkowe Is = [Isr,Isg,Isb]
+	GLfloat att_constant = { 1.0 };								// sk³adowa sta³a ds dla modelu zmian oœwietlenia w funkcji odleg³oœci od Ÿród³a
+	GLfloat att_linear = (GLfloat) 0.05;						// sk³adowa liniowa dl dla modelu zmian oœwietlenia w funkcji odleg³oœci od Ÿród³a
+	GLfloat att_quadratic = (GLfloat)  0.001;					// sk³adowa kwadratowa dq dla modelu zmian oœwietlenia w funkcji odleg³oœci od Ÿród³a
 
-	GLfloat light_position[] = { 0.0, 0.0, 5.0, 1.0 };
-	// po³o¿enie Ÿród³a
-	GLfloat light_ambient[] = { 0.1, 0.1, 0.1, 1.0 };
-	// sk³adowe intensywnoœci œwiecenia Ÿród³a œwiat³a otoczenia
-	// Ia = [Iar,Iag,Iab]
-	GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-	// sk³adowe intensywnoœci œwiecenia Ÿród³a œwiat³a powoduj¹cego
-	// odbicie dyfuzyjne Id = [Idr,Idg,Idb]
-	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	// sk³adowe intensywnoœci œwiecenia Ÿród³a œwiat³a powoduj¹cego
-	// odbicie kierunkowe Is = [Isr,Isg,Isb]
-	GLfloat att_constant = { 1.0 };
-	// sk³adowa sta³a ds dla modelu zmian oœwietlenia w funkcji
-	// odleg³oœci od Ÿród³a
-	GLfloat att_linear = (GLfloat) 0.05;
-	// sk³adowa liniowa dl dla modelu zmian oœwietlenia w funkcji
-	// odleg³oœci od Ÿród³a
-	GLfloat att_quadratic = (GLfloat)  0.001;
-	// sk³adowa kwadratowa dq dla modelu zmian oœwietlenia w funkcji
-	// odleg³oœci od Ÿród³a
-
-	// Ustawienie parametrów materia³u i Ÿród³a œwiat³a
-
+// Ustawienie parametrów materia³u i Ÿród³a œwiat³a
 	// Ustawienie patrametrów materia³u
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 	glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess);
-	// Teksturowanie bêdzie prowadzone tyko po jednej stronie œciany
-	glEnable(GL_FRONT_FACE);
-	//  Przeczytanie obrazu tekstury z pliku o nazwie tekstura.tga
-	pBytes = LoadTGAImage("images/bricks.tga", &ImWidth, &ImHeight, &ImComponents, &ImFormat);
-	// Zdefiniowanie tekstury 2-D
-	glTexImage2D(GL_TEXTURE_2D, 0, ImComponents, ImWidth, ImHeight, 0, ImFormat, GL_UNSIGNED_BYTE, pBytes);
-	// Zwolnienie pamiêci
-	free(pBytes);
+	
+//TEKSTURKI		
+	eggTex = LoadTGAImage("images/brick3.tga", &ImWidth, &ImHeight, &ImComponents, &ImFormat);
+	firstLevelTex = LoadTGAImage("images/bricks.tga", &ImWidth, &ImHeight, &ImComponents, &ImFormat);
+	teapotTex = LoadTGAImage("images/folk.tga", &ImWidth, &ImHeight, &ImComponents, &ImFormat);
+
 	// W³¹czenie mechanizmu teksturowania
 	glEnable(GL_TEXTURE_2D);
 	// Ustalenie trybu teksturowania
@@ -342,7 +328,6 @@ void ChangeSize(GLsizei horizontal, GLsizei vertical)
 void main(void)
 {
 	//srand(time(NULL));
-
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(600, 600);
 	glutCreateWindow("Sokoban");

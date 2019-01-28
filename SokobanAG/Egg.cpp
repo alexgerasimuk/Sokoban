@@ -6,22 +6,22 @@
 Egg::Egg(GLfloat x, GLfloat z)
 {
 	setPosition(x,  z);
-
+	float a = 0.7;
 	GeneratingTab();
 	for (int i = 0; i <= N; i++)
 		for (int j = 0; j <= N; j++)
 		{
 			float u = (float)i / (float)N;
 			float v = (float)j / (float)N;
-			pointsTable[i][j].x = ((-90 * pow(u, 5) + 225 * pow(u, 4) - 270 * pow(u, 3) + 180 * u*u - 45 * u)*cosf((float)M_PI*v));
-			pointsTable[i][j].y = (160 * pow(u, 4) - 320 * pow(u, 3) + 160 * u*u);
-			pointsTable[i][j].z = ((-90 * pow(u, 5) + 225 * pow(u, 4) - 270 * pow(u, 3) + 180 * u*u - 45 * u)*sinf((float)M_PI*v));
-			pointsTable[i][j].xu = (-450 * pow(u, 4) + 900 * pow(u, 3) - 810 * u*u + 360 * u - 45)*cosf((float)M_PI*v);
-			pointsTable[i][j].xv = (float)M_PI*(90 * pow(u, 5) - 225 * pow(u, 4) + 270 * pow(u, 3) - 180 * u*u + 45 * u)*sinf(M_PI*v);
-			pointsTable[i][j].yu = (640 * pow(u, 3) - 960 * u*u + 320 * u);
+			pointsTable[i][j].x = a*((-90 * pow(u, 5) + 225 * pow(u, 4) - 270 * pow(u, 3) + 180 * u*u - 45 * u)*cosf((float)M_PI*v));
+			pointsTable[i][j].y = a*(160 * pow(u, 4) - 320 * pow(u, 3) + 160 * u*u);
+			pointsTable[i][j].z =a* ((-90 * pow(u, 5) + 225 * pow(u, 4) - 270 * pow(u, 3) + 180 * u*u - 45 * u)*sinf((float)M_PI*v));
+			pointsTable[i][j].xu = a*(-450 * pow(u, 4) + 900 * pow(u, 3) - 810 * u*u + 360 * u - 45)*cosf((float)M_PI*v);
+			pointsTable[i][j].xv =a* (float)M_PI*(90 * pow(u, 5) - 225 * pow(u, 4) + 270 * pow(u, 3) - 180 * u*u + 45 * u)*sinf(M_PI*v);
+			pointsTable[i][j].yu = a*(640 * pow(u, 3) - 960 * u*u + 320 * u);
 			pointsTable[i][j].yv = 0.0;
-			pointsTable[i][j].zu = (-450 * pow(u, 4) + 900 * pow(u, 3) - 810 * u*u + 360 * u - 45)*sinf((float)M_PI*v);
-			pointsTable[i][j].zv = (-1 * (float)M_PI)*(90 * pow(u, 5) - 225 * pow(u, 4) + 270 * pow(u, 3) - 180 * u*u + 45 * u)*cosf((float)M_PI*v);
+			pointsTable[i][j].zu = a*(-450 * pow(u, 4) + 900 * pow(u, 3) - 810 * u*u + 360 * u - 45)*sinf((float)M_PI*v);
+			pointsTable[i][j].zv = a*(-1 * (float)M_PI)*(90 * pow(u, 5) - 225 * pow(u, 4) + 270 * pow(u, 3) - 180 * u*u + 45 * u)*cosf((float)M_PI*v);
 
 
 

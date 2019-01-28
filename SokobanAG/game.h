@@ -25,6 +25,8 @@ using namespace std;
 		leftM = 3,
 		rightM = 4
 	};
+
+
 	static int currentMove;
 	static GLfloat theta = 0.0;     // k¹t obrotu obiektu
 	static GLfloat phi = 0.0;
@@ -42,6 +44,9 @@ using namespace std;
 	static int delta_y = 0;			// ró¿nica pomiêdzy pozycj¹ bie¿¹c¹ i poprzedni¹ kursora myszy
 	static GLfloat R = 15.0;        //poczatkowy promien
 	static GLfloat viewer[] = { 0.0, 0.0, 5.0 };
+	GLbyte *firstLevelTex, *teapotTex, *eggTex;
+	GLint ImWidth, ImHeight, ImComponents;
+	GLenum ImFormat;
 
 	void Mouse(int btn, int state, int x, int y);
 	void Motion(GLsizei x, GLsizei y);
