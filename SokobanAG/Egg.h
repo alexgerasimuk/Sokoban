@@ -1,6 +1,5 @@
 #pragma once
 #include<stdlib.h>
-#include<Windows.h>
 #include<math.h>
 #include<iostream>
 #include <random>
@@ -8,8 +7,7 @@
 #include <cmath>
 #include <functional>
 #include <stdio.h>
-#include<gl\glut.h>
-#include<gl\Gl.h>
+#include <gl/glut.h>
 
 struct Point {
 	float x, y, z, nx, ny, nz, xv, xu, yv, yu, zv, zu;
@@ -17,14 +15,11 @@ struct Point {
 
 class Egg
 {
-	public:
-	GLfloat eggTransition[2];
-	Egg(GLfloat x, GLfloat z);
-	void setPosition(GLfloat x, GLfloat z);
-	void renderEgg();
+public:
 	int N = 100;                        // iloœæ punktów (okr¹g³oœæ jajka)
 	Point **pointsTable;
-	void GeneratingTab();
+	Egg();
 	~Egg();
+	void renderEgg();					//funkcja wyrysowuj¹ca jajko
 };
 
